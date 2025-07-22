@@ -1,5 +1,6 @@
 server:
   port: 8081
+
 spring:
   application:
     name: UserService
@@ -7,10 +8,17 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/fitness_user_db
     username: riyagrover
-    password:  # <--- leave this blank but include the key
+    password:   # Leave blank but include the key
 
   jpa:
     hibernate:
       ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
