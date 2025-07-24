@@ -1,4 +1,10 @@
 spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8181/realms/fitness-oauth2/protocol/openid-connect/certs
+
   cloud:
     gateway:
       routes:
@@ -6,10 +12,12 @@ spring:
           uri: lb://USERSERVICE
           predicates:
             - Path=/api/users/**
+
         - id: activityservice
           uri: lb://ACTIVITYSERVICE
           predicates:
             - Path=/api/activities/**
+
         - id: aiservice
           uri: lb://AISERVICE
           predicates:
