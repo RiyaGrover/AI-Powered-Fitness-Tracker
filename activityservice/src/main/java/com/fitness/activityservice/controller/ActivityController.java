@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -36,5 +37,8 @@ public class ActivityController {
         return ResponseEntity.ok(activityService.getActivityById(activityId));
     }
 
-
+    @GetMapping("/weekly-activity")
+    public ResponseEntity<List<ActivityService.WeeklyActivity>> getWeeklyActivity(@RequestHeader ("X-User-ID") String userId) {
+        return ResponseEntity.ok(activityService.getWeeklyActivity(userId));
+    }
 }
