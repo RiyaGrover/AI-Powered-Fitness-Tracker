@@ -1,74 +1,89 @@
-import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router'
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router';
 import { getActivityDetail } from '../services/api';
-import { Box, Card, CardContent, Divider, Typography } from '@mui/material';
+import { Box, Card, CardContent, Divider, Typography, Grid } from '@mui/material';
 
 const ActivityDetail = () => {
   const { id } = useParams();
   const [activity, setActivity] = useState(null);
-  const [recommendation, setRecommendation] = useState(null);
 
   useEffect(() => {
     const fetchActivityDetail = async () => {
       try {
         const response = await getActivityDetail(id);
         setActivity(response.data);
-        setRecommendation(response.data.recommendation);
       } catch (error) {
         console.error(error);
       }
-    }
-
+    };
     fetchActivityDetail();
   }, [id]);
 
-  if (!activity) {
-    return <Typography>Loading...</Typography>
-  }
+  if (!activity) return <Typography align="center" sx={{ mt: 4 }}>Loading...</Typography>;
+
   return (
-    <Box sx={{ maxWidth: 800, mx: 'auto', p: 2 }}>
-            <Card sx={{ mb: 2 }}>
-                <CardContent>
-                    <Typography variant="h5" gutterBottom>Activity Details</Typography>
-                    <Typography>Type: {activity.type}</Typography>
-                    <Typography>Duration: {activity.duration} minutes</Typography>
-                    <Typography>Calories Burned: {activity.caloriesBurned}</Typography>
-                    <Typography>Date: {new Date(activity.createdAt).toLocaleString()}</Typography>
-                </CardContent>
-            </Card>
+    <Box sx={{ maxWidth: 800, mx: 'auto', p: 3 }}>
+      <Typography variant="h4" gutterBottom align="center">Activity Details</Typography>
 
-            {recommendation && (
-                <Card>
-                    <CardContent>
-                        <Typography variant="h5" gutterBottom>AI Recommendation</Typography>
-                        <Typography variant="h6">Analysis</Typography>
-                        <Typography paragraph>{activity.recommendation}</Typography>
-                        
-                        <Divider sx={{ my: 2 }} />
-                        
-                        <Typography variant="h6">Improvements</Typography>
-                        {activity?.improvements?.map((improvement, index) => (
-                            <Typography key={index} paragraph>• {activity.improvements}</Typography>
-                        ))}
-                        
-                        <Divider sx={{ my: 2 }} />
-                        
-                        <Typography variant="h6">Suggestions</Typography>
-                        {activity?.suggestions?.map((suggestion, index) => (
-                            <Typography key={index} paragraph>• {suggestion}</Typography>
-                        ))}
-                        
-                        <Divider sx={{ my: 2 }} />
-                        
-                        <Typography variant="h6">Safety Guidelines</Typography>
-                        {activity?.safety?.map((safety, index) => (
-                            <Typography key={index} paragraph>• {safety}</Typography>
-                        ))}
-                    </CardContent>
-                </Card>
+      {/* Activity Info */}
+      <Card sx={{ mb: 3 }}>
+        <CardContent>
+          <Typography variant="h6">Basic Info</Typography>
+          <Divider sx={{ my: 1 }} />
+          <Grid container spacing={1}>
+            <Grid item xs={6}><Typography>Type:</Typography></Grid>
+            <Grid item xs={6}><Typography>{activity.type}</Typography></Grid>
+            <Grid item xs={6}><Typography>Duration:</Typography></Grid>
+            <Grid item xs={6}><Typography>{activity.duration} min</Typography></Grid>
+            <Grid item xs={6}><Typography>Calories Burned:</Typography></Grid>
+            <Grid item xs={6}><Typography>{activity.caloriesBurned}</Typography></Grid>
+            <Grid item xs={6}><Typography>Date:</Typography></Grid>
+            <Grid item xs={6}><Typography>{new Date(activity.createdAt).toLocaleString()}</Typography></Grid>
+          </Grid>
+        </CardContent>
+      </Card>
+
+      {/* AI Recommendations */}
+      {activity.recommendation && (
+        <Card sx={{ mb: 3 }}>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>AI Recommendations</Typography>
+            <Divider sx={{ mb: 2 }} />
+            {activity.recommendation && (
+              <Box>
+                <Typography variant="subtitle1">Analysis:</Typography>
+                <Typography paragraph>{activity.recommendation}</Typography>
+              </Box>
             )}
-        </Box>
-  )
-}
+            {activity.improvements?.length > 0 && (
+              <Box>
+                <Typography variant="subtitle1">Improvements:</Typography>
+                {activity.improvements.map((imp, idx) => (
+                  <Typography key={idx} paragraph>• {imp}</Typography>
+                ))}
+              </Box>
+            )}
+            {activity.suggestions?.length > 0 && (
+              <Box>
+                <Typography variant="subtitle1">Suggestions:</Typography>
+                {activity.suggestions.map((sug, idx) => (
+                  <Typography key={idx} paragraph>• {sug}</Typography>
+                ))}
+              </Box>
+            )}
+            {activity.safety?.length > 0 && (
+              <Box>
+                <Typography variant="subtitle1">Safety Guidelines:</Typography>
+                {activity.safety.map((safe, idx) => (
+                  <Typography key={idx} paragraph>• {safe}</Typography>
+                ))}
+              </Box>
+            )}
+          </CardContent>
+        </Card>
+      )}
+    </Box>
+  );
+};
 
-export default ActivityDetail
+export default ActivityDetail;

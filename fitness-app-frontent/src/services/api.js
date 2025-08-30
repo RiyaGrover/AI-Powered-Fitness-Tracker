@@ -1,7 +1,4 @@
 import axios from "axios";
-import { use } from "react";
-
-
 const API_URL ='/api/';
 
 const api = axios.create({
@@ -24,3 +21,5 @@ export const getActivities= () => api.get('/activities');
 export const addActivity = (activity) => api.post('/activities', activity);
 export const getActivityDetail = (id) => api.get(`/recommendations/activity/${id}`);
 export const getWeeklyActivity = () => api.get('/users/dashboard/weekly-activity');
+
+

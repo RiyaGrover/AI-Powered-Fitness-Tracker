@@ -1,16 +1,18 @@
 import React, { useState } from "react";
-import Box from '@mui/material/Box';
-import {addActivity} from '../services/api'
 import {
+  Box,
   Button,
+  Card,
+  CardContent,
+  Typography,
   FormControl,
   InputLabel,
-  MenuItem,
   Select,
-  TextField
+  MenuItem,
+  TextField,
+  Grid
 } from "@mui/material";
-import { useSelector } from "react-redux";
-
+import { addActivity } from '../services/api';
 
 const ActivityForm = ({ onActivityAdded }) => {
   const [activity, setActivity] = useState({
@@ -32,40 +34,48 @@ const ActivityForm = ({ onActivityAdded }) => {
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ mb: 4 }}>
-      <FormControl fullWidth sx={{ mb: 2 }}>
-        <InputLabel>Activity Type</InputLabel>
-        <Select
-          value={activity.type}
-          label="Activity Type"
-          onChange={(e) => setActivity({ ...activity, type: e.target.value })}
-        >
-          <MenuItem value="RUNNING">Running</MenuItem>
-          <MenuItem value="WALKING">Walking</MenuItem>
-          <MenuItem value="CYCLING">Cycling</MenuItem>
-        </Select>
-      </FormControl>
-
-      <TextField
-        fullWidth
-        label="Duration (Minutes)"
-        type="number"
-        sx={{ mb: 2 }}
-        value={activity.duration}
-        onChange={(e) => setActivity({ ...activity, duration: e.target.value })}
-      />
-
-      <TextField
-        fullWidth
-        label="Calories Burned"
-        type="number"
-        sx={{ mb: 2 }}
-        value={activity.caloriesBurned}
-        onChange={(e) => setActivity({ ...activity, caloriesBurned: e.target.value })}
-      />
-
-      <Button type="submit" variant="contained">Add Activity</Button>
-    </Box>
+    <Card sx={{ maxWidth: 700, mx: "auto", mb: 4, p: 3 }}>
+      <Typography variant="h6" gutterBottom>Add New Activity</Typography>
+      <Box component="form" onSubmit={handleSubmit}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={4}>
+            <FormControl fullWidth>
+              <InputLabel>Activity Type</InputLabel>
+              <Select
+                value={activity.type}
+                label="Activity Type"
+                onChange={(e) => setActivity({ ...activity, type: e.target.value })}
+              >
+                <MenuItem value="RUNNING">Running</MenuItem>
+                <MenuItem value="WALKING">Walking</MenuItem>
+                <MenuItem value="CYCLING">Cycling</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              fullWidth
+              label="Duration (Minutes)"
+              type="number"
+              value={activity.duration}
+              onChange={(e) => setActivity({ ...activity, duration: e.target.value })}
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField
+              fullWidth
+              label="Calories Burned"
+              type="number"
+              value={activity.caloriesBurned}
+              onChange={(e) => setActivity({ ...activity, caloriesBurned: e.target.value })}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Button type="submit" variant="contained" color="primary" fullWidth>Add Activity</Button>
+          </Grid>
+        </Grid>
+      </Box>
+    </Card>
   );
 };
 
