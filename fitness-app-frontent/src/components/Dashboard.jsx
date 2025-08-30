@@ -1,3 +1,4 @@
+// src/Dashboard.js
 import React, { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
@@ -5,18 +6,16 @@ const Dashboard = () => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        // We will add the data fetching logic here in a later step
-        // For now, let's use some placeholder data to see the chart
-        const placeholderData = [
-            { day: 'Mon', caloriesBurned: 400 },
-            { day: 'Tue', caloriesBurned: 300 },
-            { day: 'Wed', caloriesBurned: 600 },
-            { day: 'Thu', caloriesBurned: 500 },
-            { day: 'Fri', caloriesBurned: 750 },
-            { day: 'Sat', caloriesBurned: 900 },
-            { day: 'Sun', caloriesBurned: 800 },
-        ];
-        setData(placeholderData);
+        // Fetch real data from the Spring Boot API
+        fetch('http://localhost:5173/api/dashboard/weekly-activity')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => setData(data))
+            .catch(error => console.error('Error fetching data:', error));
     }, []);
 
     return (
